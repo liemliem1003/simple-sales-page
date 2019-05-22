@@ -1,0 +1,20 @@
+.product {
+  border-radius: 3px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.product-item {
+  background: seashell;
+  padding: 15px 10px;
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.product-item span {
+  flex: 0.2;
+}
+.product-item:hover {
+  cursor: pointer;
+}

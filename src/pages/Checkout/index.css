@@ -1,0 +1,16 @@
+.checkout-product{
+  display: flex;
+  border-style: solid;
+  width: 400px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+
+}
+.checkout-product div{
+  padding: 0 10px 0 10px;
+}
+.checkout-product button{
+  height: 20px;
+}

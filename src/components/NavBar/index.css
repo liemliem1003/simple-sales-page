@@ -1,0 +1,25 @@
+nav {
+  background: #36a579;
+  color: #eee;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+nav ul {
+  display: flex;
+  justify-content: center;
+}
+nav ul li {
+  display: inline-block;
+  padding: 5px 15px;
+  height: 35px;
+  line-height: 35px;
+  text-transform: uppercase;
+}
+nav ul li:hover {
+  cursor: pointer;
+  height: 32px;
+  line-height: 32px;
+  border-bottom: 3px solid salmon;
+}
