@@ -65,9 +65,9 @@ class App extends React.Component {
     this.setState(newState)
   }
 
-  addQuantity = quantity => {
+  addQuantity = product => {
     this.state.shoppingCart.forEach(function(element){
-      if(element.id==quantity.id) {
+      if(element.id==product.id) {
         element.quantity++
       }
     })
@@ -75,30 +75,45 @@ class App extends React.Component {
     this.setState(newState)
   }
 
-  subtractQuantity = quantity => {
-    if (quantity.quantity>0) {
+  subtractQuantity = product => {
+    if (product.quantity>1) {
       this.state.shoppingCart.forEach(function(element){
-        if(element.id==quantity.id) {
+        if(element.id==product.id) {
           element.quantity--
         }
       })
       const newState = {...this.state, shoppingCart:this.state.shoppingCart}
       this.setState(newState)
+    }else {
+      for (var i = 0; i < this.state.shoppingCart.length; i++) {
+        if(this.state.shoppingCart[i].id==product.id) {
+          this.state.shoppingCart.splice(i,1)
+        }
+      }
+      const newState = {...this.state, shoppingCart:this.state.shoppingCart}
+      this.setState(newState)
     }
   }
 
-  numberWithCommas() {
-    var x =0
-    this.state.shoppingCart.forEach(function(element){
-      x+=element.price*element.quantity
-    })
-    x = x.toString();
-    var pattern = /(-?\d+)(\d{3})/;
-    while (pattern.test(x))
-        x = x.replace(pattern, "$1,$2");
-    return x;
+  onCheckout = () => {
+    const state = this.state
+    const {shoppingCart, successShoopingCart} = state
+    const newShoppingCart = []
+    const newSuccessShoopingCart =
+      successShoopingCart.length > 0
+        ? [...successShoopingCart, shoppingCart]
+        : [shoppingCart]
+    const newAppState = {
+      ...state,
+      shoppingCart: newShoppingCart,
+      successShoopingCart: newSuccessShoopingCart,
+    }
+    this.setState(newAppState)
+    alert("Checkout successfully")
   }
+
   render() {
+    console.log(this.state);
     const pageMapper = {
       home: <Home />,
       about: <About />,
@@ -107,8 +122,7 @@ class App extends React.Component {
       ),
       checkout:(
         <div>
-          <Checkout checkout={this.state.shoppingCart} addQuantity={this.addQuantity} subtractQuantity={this.subtractQuantity}/>
-          {this.state.shoppingCart.length!=0 ? <div>Total Order: {this.numberWithCommas()}$</div>: <div></div>}
+          <Checkout checkout={this.state.shoppingCart} checkoutbtn={this.onCheckout} addQuantity={this.addQuantity} subtractQuantity={this.subtractQuantity}/>
         </div>
       ),
     }
