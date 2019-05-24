@@ -5,35 +5,16 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Checkout from './pages/Checkout'
 import './App.css'
+import productsList from './Products.js'
 
 class App extends React.Component {
   state = {
-    activePage: 'about',
+    firstProductList: productsList,
+    activePage: 'products',
     productDetail: null,
     shoppingCart: [],
     successShoopingCart: [],
-    products: [
-      {
-        id: '1',
-        name: 'iPhone6',
-        price: 650,
-      },
-      {
-        id: '2',
-        name: 'iPhone6 Plus',
-        price: 700,
-      },
-      {
-        id: '3',
-        name: 'iPhone7',
-        price: 750,
-      },
-      {
-        id: '4',
-        name: 'iPhone7 Plus',
-        price: 800,
-      },
-    ],
+    products: productsList,
   }
 
   onProductClick = product => {
@@ -112,13 +93,72 @@ class App extends React.Component {
     alert("Checkout successfully")
   }
 
+  sortByName = condition =>{
+    const product = [...this.state.products]
+    product.forEach(function(element){
+      element.point=0
+    })
+    for (var i = 0; i < product.length; i++) {
+      for (var j = 0; j < product.length; j++) {
+        product[i].name.toUpperCase() > product[j].name.toUpperCase()
+        ? product[i].point++
+        : product[i].point+=0
+      }
+    }
+    condition
+    ? product.sort(function(a,b){
+      return a.point - b.point
+      })
+    : product.sort(function(a,b){
+      return b.point - a.point
+      })
+    product.forEach(function(a){
+      delete a.point
+    })
+    const newState = {...this.state, products:[...product]}
+    this.setState(newState)
+  }
+
+  sortByPrice = condition =>{
+    const product = [...this.state.products]
+    condition
+    ? product.sort(function(a,b){
+      return a.price - b.price
+      })
+    : product.sort(function(a,b){
+      return b.price - a.price
+      })
+    const newState = {...this.state, products:[...product]}
+    this.setState(newState)
+      console.log(this.state.products)
+  }
+
+  findProductsByName = name =>{
+    const products=[...this.state.firstProductList]
+    var newproducts = []
+    name=name.split("")
+    products.forEach(function(element){
+      var count =0;
+      for (var i = 0; i < name.length; i++) {
+        if (i==0) {
+          element.name.toUpperCase().indexOf(name[i].toUpperCase()) > -1 ? count++ : count= count
+        }else {
+          element.name.toUpperCase().indexOf(name[i].toUpperCase(),element.name.toUpperCase().indexOf(name[i-1].toUpperCase())+1) > -1
+          ? count++
+          : count = count
+        }
+      }
+      count == name.length ? newproducts = [...newproducts,element] : newproducts = newproducts
+    })
+    const newState = {...this.state, products:[...newproducts]}
+    this.setState(newState)
+  }
   render() {
-    console.log(this.state);
     const pageMapper = {
       home: <Home />,
       about: <About />,
       products: (
-        <Products products={this.state.products} onProductClick={this.onProductClick}/>
+        <Products findProductsByName={this.findProductsByName} sortByName={this.sortByName} sortByPrice={this.sortByPrice} products={this.state.products} onProductClick={this.onProductClick}/>
       ),
       checkout:(
         <div>
